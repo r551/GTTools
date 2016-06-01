@@ -111,6 +111,10 @@ abstract public class AbsOutParam<T extends Comparable> implements Key {
 		{
 			record(System.currentTimeMillis(), value);
 		}
+		if (monitor)
+		{
+			threshold(value);
+		}
 	}
 
 	public void setValue(long time, T value) {
@@ -123,6 +127,10 @@ abstract public class AbsOutParam<T extends Comparable> implements Key {
 		if (record && checkValue(value))
 		{
 			record(time, value);
+		}
+		if (monitor)
+		{
+			threshold(value);
 		}
 	}
 
@@ -152,7 +160,10 @@ abstract public class AbsOutParam<T extends Comparable> implements Key {
 		}
 		TimeBean<T> timeBean = new  TimeBean<T>(time, value);
 		recorder.add(timeBean);
-		
+	}
+
+	private synchronized void threshold(T value)
+	{
 		if (monitor && null != thresholdEntry)
 		{
 			thresholdEntry.add(value);
