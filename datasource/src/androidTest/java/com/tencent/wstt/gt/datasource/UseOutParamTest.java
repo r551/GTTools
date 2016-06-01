@@ -52,14 +52,17 @@ public class UseOutParamTest {
     @Test
     public void testCPUWithOutParamThreshold() throws InterruptedException
     {
-        Timer timer = new Timer();
+        // 创建用于监控CPU指标的对象
         final DoubleOutParam cpuOutParam = new DoubleOutParam(null, "CPU");
         cpuOutParam.setRecord(true); // 启动记录
         cpuOutParam.setMonitor(true); // 启动告警监控
-        // 设置CPU超出10的告警阈值
+        /*
+         * 设置CPU超出10的告警阈值
+         */
         cpuOutParam.addThresholdListener(new DoubleThresholdListener<AbsOutParam<Double>>(10.0d, 1, null, 0, null, 0) {
             @Override
             public void onHigherThan(AbsOutParam<Double> src, Double data, IGTComparator<Double> c) {
+                // 当CPU超过10时，触发该回调，输出下面的信息到控制台
                 System.out.println("CPU higher than "+ c.getTarget() + ":" + data);
             }
 
@@ -74,7 +77,10 @@ public class UseOutParamTest {
             }
         });
 
-        // 进程号填0，关注的即整机的CPU
+        /*
+         * 初始化CPU数据采集任务，监听中使用前面创建的cpuOutParam对象对CPU数据进行监控
+         * 进程号填0，关注的即整机的CPU
+         */
         CPUTimerTask task = new CPUTimerTask(0, 1000,
                 new DataRefreshListener<Double>(){
 
@@ -84,8 +90,13 @@ public class UseOutParamTest {
                         System.out.println("CPU:" + data);
                     }},null);
 
+        // 启动定时任务，注意因为任务本身有1000ms的时间间隔，所以定时任务的间隔填最小的1ms
+        // CPU指标的采集之所以如此设计，是为了和其他指标采集方式保持一致
+        Timer timer = new Timer();
         timer.schedule(task, 0, 1);
         Thread.sleep(10000);
+
+        // 打印此时已记录的CPU历史数据
         for (TimeBean<Double> timeBean : cpuOutParam.getRecordList())
         {
             System.out.println("CPU:" + timeBean.data + " Time:" + timeBean.time);
@@ -93,17 +104,13 @@ public class UseOutParamTest {
     }
 
     /**
-     * 利用出参的阈值能力对超过10%的CPU进行告警
+     * 利用出参的阈值能力对手机内存低于800MB时进行告警
      */
     @Test
     public void testMEMWithOutParamThreshold() throws InterruptedException
     {
-        Timer timer = new Timer();
-
         final LongOutParam memOutParam = new LongOutParam(null, "MEM");
-
         final LongOutParam memAllOutParam = new LongOutParam(null, "Total");
-
         final LongOutParam memFreeOutParam = new LongOutParam(null, "Free");
         memFreeOutParam.setRecord(true); // 启动记录
         memFreeOutParam.setMonitor(true); // 启动告警监控
@@ -116,6 +123,7 @@ public class UseOutParamTest {
 
             @Override
             public void onLowerThan(AbsOutParam<Long> src, Long data, IGTComparator<Long> c) {
+                // 当Free内存低于800MB时会触发此告警向控制台输出打印信息
                 System.out.println("MEM Free lower than "+ c.getTarget() + ", " + c.getCount() + " times:" + data);
             }
 
@@ -128,7 +136,7 @@ public class UseOutParamTest {
         memOutParam.addChild(memAllOutParam);
         memOutParam.addChild(memFreeOutParam);
 
-        // 进程号填0，关注的即整机的CPU
+        // 对手机整机的内存数据进行监控
         MEMTimerTask task = new MEMTimerTask(new DataRefreshListener<Long[]>(){
 
             @Override
@@ -138,8 +146,12 @@ public class UseOutParamTest {
                 System.out.println("MEM Free/Total:" + (data[1] + data[2] + data[3]) + "/" + data[0]);
             }});
 
+        // 启动定时任务，因为内存数据是即时值，所以定时1000ms采集一次
+        Timer timer = new Timer();
         timer.schedule(task, 0, 1000);
         Thread.sleep(10000);
+
+        // 打印此时已记录的剩余内存历史数据
         for (TimeBean<Long> timeBean : memOutParam.getChild(1).getRecordList())
         {
             System.out.println("MEM Free:" + timeBean.data + " Time:" + timeBean.time);
