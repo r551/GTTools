@@ -1,6 +1,6 @@
 # GTTools
 #### Headers
-GTTools工具包是从[Android GT]源码中剥离并重构出来的可复用模块，在抽象过程中尽可能的考虑可扩展性。GTTools工具包主要提供给基于AndroidJUnit的测试脚本用于性能指标的采集于数据监控。
+GTTools工具包是从[Android GT]源码中剥离并重构出来的可复用模块，在抽象过程中尽可能的考虑可扩展性。GTTools工具包主要提供给基于AndroidJUnit的测试脚本用于性能指标的采集和数据监控。
 #### 当前版本
 v1.0
 #### 模块介绍
