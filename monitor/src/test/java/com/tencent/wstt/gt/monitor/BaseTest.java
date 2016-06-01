@@ -2,7 +2,6 @@ package com.tencent.wstt.gt.monitor;
 
 import com.tencent.wstt.gt.monitor.model.AbsOutParam;
 import com.tencent.wstt.gt.monitor.model.Group;
-import com.tencent.wstt.gt.monitor.model.Key;
 import com.tencent.wstt.gt.monitor.simple.LongOutParam;
 import com.tencent.wstt.gt.monitor.simple.LongThresholdListener;
 import com.tencent.wstt.gt.monitor.threshold.IGTComparator;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -83,10 +81,11 @@ public class BaseTest {
 	@Test
 	public void testGroupParam()
 	{
-		Group<Key> group = new Group<Key>("test");
-		LongOutParam singleParam = new LongOutParam(group, "singleParam");
+		Group<LongOutParam> group = new Group<LongOutParam>("test");
+		LongOutParam singleParam = new LongOutParam(null, "singleParam");
 		singleParam.setRecord(true);
 
+		group.register(singleParam);
 		Assert.assertEquals(group.isEmpty(), false);
 
 		group.clear();

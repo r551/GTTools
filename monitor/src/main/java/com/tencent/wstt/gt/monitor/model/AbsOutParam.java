@@ -49,10 +49,6 @@ abstract public class AbsOutParam<T extends Comparable> implements Key {
 	public AbsOutParam(Group<Key> group, String key)
 	{
 		this.group = group;
-		if (null != group)
-		{
-			group.register(this);
-		}
 		this.key = key;
 	}
 
@@ -63,12 +59,7 @@ abstract public class AbsOutParam<T extends Comparable> implements Key {
 	public Group<Key> getGroup() {
 		return group;
 	}
-
-	public void setGroup(Group<Key> group)
-	{
-		this.group = group;
-	}
-
+	
 	public String getKey() {
 		return this.key;
 	}
