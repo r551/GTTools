@@ -14,7 +14,7 @@ Android相关的轻量工具包，依赖Android SDK，无独立使用价值。
 LogCat日志解析模块，从CatLog精简而来。依赖util模块，一般不会独立使用。
 ### DEMO
 ##### monitor模块的使用
-详细代码在monitor/src/test目录中
+完整测试代码在monitor/src/test目录中
 ```java
 Queue<Long> queue;
 
@@ -87,7 +87,7 @@ public void testGroupParam()
 }
 ```
 ##### datasource模块的使用
-详细代码在datasource/src/androidTest/UseOutParamTest类中
+完整测试代码在datasource/src/androidTest/UseOutParamTest类中
 ```java
 /**
  * 利用出参的阈值能力对超过10%的CPU进行告警
