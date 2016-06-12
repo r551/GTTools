@@ -43,7 +43,7 @@ abstract public class AbsOutParam<T extends Comparable> implements Key {
 	// 是否已进行告警监听
 	private boolean monitor;
 
-	// Client代表生命周期
+	// Group代表生命周期
 	private Group<Key> group;
 	
 	public AbsOutParam(Group<Key> group, String key)
