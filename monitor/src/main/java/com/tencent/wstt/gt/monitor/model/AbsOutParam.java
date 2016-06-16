@@ -206,6 +206,21 @@ abstract public class AbsOutParam<T extends Comparable> implements Key {
 		return recorder.size();
 	}
 
+	public void clearAllRecords() {
+		if (children != null && !children.isEmpty())
+		{
+			for (AbsOutParam<T> p : children)
+			{
+				p.clearAllRecords();
+			}
+		}
+		if (null == recorder)
+		{
+			return;
+		}
+		recorder.clear();
+	}
+
 	/**
 	 * 增加告警阈值监听
 	 * @param listener 发生告警的监听
