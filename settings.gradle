@@ -1,1 +1,1 @@
-include ':app', ':util', ':log', ':monitor', ':datasource'
+include ':app', ':util', ':log', ':monitor', ':datasource', ':facade', ':datasourceOutOfAndroid'

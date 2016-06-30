@@ -26,6 +26,7 @@ package com.tencent.wstt.gt.datasource;
 import android.support.test.InstrumentationRegistry;
 
 import com.tencent.wstt.gt.datasource.engine.DataRefreshListener;
+import com.tencent.wstt.gt.datasource.engine.HeapTimerTask;
 import com.tencent.wstt.gt.datasource.engine.MEMTimerTask;
 import com.tencent.wstt.gt.datasource.engine.PrivateDirtyTimerTask;
 import com.tencent.wstt.gt.datasource.engine.PssTimerTask;
@@ -73,14 +74,32 @@ public class MEMTest {
 	public void testPrivateDirty() throws InterruptedException
 	{
 		Timer timer = new Timer();
-		
+
 		PrivateDirtyTimerTask task = new PrivateDirtyTimerTask(InstrumentationRegistry.getTargetContext(), android.os.Process.myPid(),
-			new DataRefreshListener<Long[]>(){
-	
-				@Override
-				public void onRefresh(long time, Long[] data) {
-					System.out.println(data[0] + "/" + data[1] + "/" + data[2]);
-				}});
+				new DataRefreshListener<Long[]>(){
+
+					@Override
+					public void onRefresh(long time, Long[] data) {
+						System.out.println(data[0] + "/" + data[1] + "/" + data[2]);
+					}});
+
+		timer.schedule(task, 0, 1000);
+		Thread.sleep(10000);
+	}
+
+	@Test
+	public void testHeap() throws InterruptedException
+	{
+		Timer timer = new Timer();
+
+		HeapTimerTask task = new HeapTimerTask(
+				new DataRefreshListener<Long[]>(){
+
+					@Override
+					public void onRefresh(long time, Long[] data) {
+						System.out.println(data[0] + "/" + data[1] + "/" + data[2]
+								+ "/" + data[3] + "/" + data[4] + "/" + data[5]);
+					}});
 
 		timer.schedule(task, 0, 1000);
 		Thread.sleep(10000);

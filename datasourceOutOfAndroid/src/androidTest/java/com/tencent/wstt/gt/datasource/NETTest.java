@@ -24,71 +24,54 @@
 package com.tencent.wstt.gt.datasource;
 
 import com.tencent.wstt.gt.datasource.engine.DataRefreshListener;
-import com.tencent.wstt.gt.datasource.engine.SMTimerTask;
-import com.tencent.wstt.gt.datasource.util.SMUtils;
-
-import junit.framework.Assert;
+import com.tencent.wstt.gt.datasource.engine.NETTimerTask;
+import com.tencent.wstt.gt.datasource.engine.UidNETTimerTask;
+import com.tencent.wstt.gt.datasource.util.UidNETUtils;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 
-public class SMTest {
+public class NETTest {
 	@Test
-	public void testSMBase() throws InterruptedException
+	// 需要权限：android.permission.ACCESS_NETWORK_STATE
+	public void testNet() throws InterruptedException
 	{
 		Timer timer = new Timer();
+		
+		NETTimerTask task = new NETTimerTask(
+			new DataRefreshListener<Double[]>(){
+	
+				@Override
+				public void onRefresh(long time, Double[] data) {
+					System.out.println(data[0] + "/" + data[1] + "/" + data[2]+ "/" + data[3]+ "/" + data[4]+ "/" + data[5]);
+				}});
 
-		SMTimerTask taskSM = new SMTimerTask(new DataRefreshListener<Long>() {
-
-			@Override
-			public void onRefresh(long time, Long data) {
-				System.out.println("SM:" + data);
-			}
-		});
-		timer.schedule(taskSM, 1000, 1000); // 初始执行的时候也要延迟1000，因为立即采集的数据是0
+		timer.schedule(task, 0, 1000);
 		Thread.sleep(10000);
 	}
 
 	@Test
-	public void testSMStop() throws InterruptedException
+	public void testUidNet() throws InterruptedException
 	{
 		Timer timer = new Timer();
-
-		SMTimerTask taskSM = new SMTimerTask(new DataRefreshListener<Long>() {
-
-			@Override
-			public void onRefresh(long time, Long data) {
-				System.out.println("SM:" + data);
-			}
-		});
-		timer.schedule(taskSM, 0, 1000);
-		Thread.sleep(5000);
-		taskSM.stop();
-		Thread.sleep(5000);
-	}
-
-	@Test
-	public void testGetSMDetail() throws InterruptedException
-	{
-		// 准备一组假数据
-		List<Long> lst = new ArrayList<Long>();
-		for (int i = 0; i < 100; i++)
+		// 需要先选择适合自己环境的采集方案
+		if (!UidNETUtils.test(-1))
 		{
-			lst.add(Long.valueOf(60));
+			UidNETUtils.Case c = new UidNETUtils.CaseTrafficStats();
+			if (!c.test(-1)) c = new UidNETUtils.CaseInvalid();
+			UidNETUtils.setSampleCase(c);
 		}
 
-		lst.add(Long.valueOf(10));
+		UidNETTimerTask task = new UidNETTimerTask(1000,
+			new DataRefreshListener<Double[]>(){
+	
+				@Override
+				public void onRefresh(long time, Double[] data) {
+					System.out.println(data[0] + "/" + data[1]);
+				}});
 
-		for (int i = 0; i < 100; i++)
-		{
-			lst.add(Long.valueOf(60));
-		}
-
-		int[] result = SMUtils.getSmDetail(lst);
-		Assert.assertTrue(result[5] < 95);
-		Assert.assertEquals(result[1], 5);
+		timer.schedule(task, 0, 1000);
+		Thread.sleep(100000);
 	}
 }

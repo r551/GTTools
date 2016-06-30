@@ -23,16 +23,12 @@
  */
 package com.tencent.wstt.gt.datasource;
 
-import android.support.test.InstrumentationRegistry;
-
 import com.tencent.wstt.gt.datasource.engine.CPUTimerTask;
 import com.tencent.wstt.gt.datasource.engine.DataRefreshListener;
 import com.tencent.wstt.gt.datasource.engine.FPSTimerTask;
-import com.tencent.wstt.gt.datasource.engine.HeapTimerTask;
 import com.tencent.wstt.gt.datasource.engine.MEMTimerTask;
 import com.tencent.wstt.gt.datasource.engine.NETTimerTask;
-import com.tencent.wstt.gt.datasource.engine.PrivateDirtyTimerTask;
-import com.tencent.wstt.gt.datasource.engine.PssTimerTask;
+import com.tencent.wstt.gt.datasource.engine.ProcessMemTimerTask;
 import com.tencent.wstt.gt.datasource.engine.SMTimerTask;
 import com.tencent.wstt.gt.datasource.engine.UidNETTimerTask;
 import com.tencent.wstt.gt.datasource.util.UidNETUtils;
@@ -60,13 +56,13 @@ public class AllTest {
         timerFPS.schedule(taskFPS, 0, 1000);
 
         // SM
-        SMTimerTask taskSM = new SMTimerTask(new DataRefreshListener<Long>() {
+        SMTimerTask taskSM = new SMTimerTask(android.os.Process.myPid(), new DataRefreshListener<Long>() {
 
             @Override
             public void onRefresh(long time, Long data) {
                 System.out.println("SM:" + data);
             }
-        });
+        }, true);
         timerSM.schedule(taskSM, 0, 1000);
 
         // Other
@@ -100,7 +96,7 @@ public class AllTest {
 
         timer.schedule(task4, 0, 1000);
 
-        PssTimerTask task5 = new PssTimerTask(InstrumentationRegistry.getTargetContext(), android.os.Process.myPid(),
+        ProcessMemTimerTask task5 = new ProcessMemTimerTask("com.android.systemui",
                 new DataRefreshListener<Long[]>() {
 
                     @Override
@@ -111,17 +107,7 @@ public class AllTest {
 
         timer.schedule(task5, 0, 1000);
 
-        PrivateDirtyTimerTask task6 = new PrivateDirtyTimerTask(InstrumentationRegistry.getTargetContext(), android.os.Process.myPid(),
-                new DataRefreshListener<Long[]>() {
-
-                    @Override
-                    public void onRefresh(long time, Long[] data) {
-                        System.out.println("Private Dirty:" + data[0] + "/" + data[1] + "/" + data[2]);
-                    }
-                });
-        timer.schedule(task6, 0, 1000);
-
-        NETTimerTask task7 = new NETTimerTask(InstrumentationRegistry.getTargetContext(),
+        NETTimerTask task7 = new NETTimerTask(
                 new DataRefreshListener<Double[]>() {
                     @Override
                     public void onRefresh(long time, Double[] data) {
@@ -130,16 +116,6 @@ public class AllTest {
                 });
         timer.schedule(task7, 0, 1000);
 
-        HeapTimerTask task8 = new HeapTimerTask(
-                new DataRefreshListener<Long[]>(){
-
-                    @Override
-                    public void onRefresh(long time, Long[] data) {
-                        System.out.println(data[0] + "/" + data[1] + "/" + data[2]
-                                + "/" + data[3] + "/" + data[4] + "/" + data[5]);
-                    }});
-        timer.schedule(task8, 0, 1000);
-
         // 需要先选择适合自己环境的采集方案
         if (!UidNETUtils.test(-1)) {
             UidNETUtils.Case c = new UidNETUtils.CaseTrafficStats();
@@ -147,7 +123,7 @@ public class AllTest {
             UidNETUtils.setSampleCase(c);
         }
 
-        UidNETTimerTask task9 = new UidNETTimerTask(1000,
+        UidNETTimerTask task8 = new UidNETTimerTask(1000,
                 new DataRefreshListener<Double[]>() {
 
                     @Override
@@ -155,7 +131,7 @@ public class AllTest {
                         System.out.println("UID NET:" + data[0] + "/" + data[1]);
                     }
                 });
-        timer.schedule(task9, 0, 1000);
+        timer.schedule(task8, 0, 1000);
         Thread.sleep(20000);
     }
 }

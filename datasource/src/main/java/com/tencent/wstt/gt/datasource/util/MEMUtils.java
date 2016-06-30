@@ -25,6 +25,7 @@ package com.tencent.wstt.gt.datasource.util;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.os.Debug;
 import android.os.Debug.MemoryInfo;
 
 import java.lang.reflect.Method;
@@ -116,6 +117,39 @@ public class MEMUtils {
 			value[2] = 0;
 		}
 
+		return value;
+	}
+
+	/**
+	 * 获取本进程的内存Heap数据
+	 * 注：该数值与Java方式虚拟机算法的内存值一致，和Dumpsys meminfo方式的数值有较大出入
+	 * @return {NativeSize,NativeAllocatedSize,DalvikSize,DalvikAllocatedSize,HeapSize,HeapAllocatedSize}
+	 */
+	public static long[] getHeap() {
+		long[] value = new long[6]; // NativeSize,NativeAllocatedSize,DalvikSize,DalvikAllocatedSize,HeapSize,HeapAllocatedSize
+		long[] nativeValue = getHeapNative();
+		long[] dalvikValue = getHeapDalvik();
+		value[0] = nativeValue[0];
+		value[1] = nativeValue[1];
+		value[2] = dalvikValue[0];
+		value[3] = dalvikValue[1];
+		value[4] = nativeValue[0] + dalvikValue[0];
+		value[5] = nativeValue[1] + dalvikValue[1];
+		return value;
+	}
+
+	public static long[] getHeapNative() {
+		long[] value = new long[2];
+		value[0] = Debug.getNativeHeapSize() >> 10;
+		value[1] = Debug.getNativeHeapAllocatedSize() >> 10;
+		return value;
+	}
+
+	public static long[] getHeapDalvik() {
+		long[] value = new long[2];
+		value[0] = Runtime.getRuntime().totalMemory() >> 10; // Runtime取的就是虚拟机算法的内存值
+		value[1] = (Runtime.getRuntime().totalMemory() - Runtime
+				.getRuntime().freeMemory()) >> 10;
 		return value;
 	}
 }

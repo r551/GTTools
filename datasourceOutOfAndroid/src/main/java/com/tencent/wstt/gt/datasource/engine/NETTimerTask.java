@@ -23,68 +23,37 @@
  */
 package com.tencent.wstt.gt.datasource.engine;
 
-import com.tencent.wstt.gt.datasource.util.SMUtils;
+import com.tencent.wstt.gt.datasource.util.NETUtils;
 
-import java.lang.reflect.Field;
 import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 流畅度数据采集引擎，用于采集本进程的流畅度数据
+ * 整机流量采集引擎
  */
-public class SMTimerTask extends TimerTask {
-	private boolean isGetPeriod = false; // 是否已获取执行间隔值
-	private long thisPeriod = 1000; // 默认1000ms，在初次执行时要通过反射方法在超类中获取真实值
-
-	private DataRefreshListener<Long> dataRefreshListener;
-
-	private AtomicInteger count;
+public class NETTimerTask extends TimerTask {
+	private DataRefreshListener<Double[]> dataRefreshListener;
 
 	/**
 	 * 构造方法
 	 * @param dataRefreshListener 数据的监听器
 	 */
-	public SMTimerTask(DataRefreshListener<Long> dataRefreshListener)
+	public NETTimerTask(DataRefreshListener<Double[]> dataRefreshListener)
 	{
 		this.dataRefreshListener = dataRefreshListener;
-		count = SMUtils.startSampleSM();
 	}
 
-	/*
-	 * 主循环，1s执行一次
-	 * @see java.util.TimerTask#run()
-	 */
 	public void run() {
-		if (!SMUtils.isRunning())
+		double result[] = NETUtils.getNetTxRxKB();
+		Double temp[] = new Double[result.length];
+		for (int i = 0; i < result.length; i++)
 		{
-			return;
+			temp[i] = Double.valueOf(result[i]);
 		}
-
-		// Task的执行采样间隔
-		if (! isGetPeriod)
-		{
-			Class<?> clz = TimerTask.class;
-			Field superPeriod;
-			try {
-				superPeriod = clz.getDeclaredField("period");
-				superPeriod.setAccessible(true);
-				thisPeriod = superPeriod.getLong(this);
-			} catch (NoSuchFieldException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			isGetPeriod = true;
-		}
-
-		int x = count.getAndSet(0);
-		// 需要根据采样间隔对刷新次数进行放大或缩小
-		dataRefreshListener.onRefresh(System.currentTimeMillis(), Long.valueOf(x * 1000 / thisPeriod));
+		dataRefreshListener.onRefresh(System.currentTimeMillis(), temp);
 	}
 
 	public void stop()
 	{
 		this.cancel();
-		SMUtils.stopSampleSM();
 	}
 }

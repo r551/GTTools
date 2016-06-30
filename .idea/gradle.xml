@@ -11,6 +11,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/datasource" />
+            <option value="$PROJECT_DIR$/datasourceOutOfAndroid" />
+            <option value="$PROJECT_DIR$/facade" />
             <option value="$PROJECT_DIR$/log" />
             <option value="$PROJECT_DIR$/monitor" />
             <option value="$PROJECT_DIR$/util" />
@@ -21,6 +23,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/datasource" />
+            <option value="$PROJECT_DIR$/datasourceOutOfAndroid" />
+            <option value="$PROJECT_DIR$/facade" />
             <option value="$PROJECT_DIR$/log" />
             <option value="$PROJECT_DIR$/monitor" />
             <option value="$PROJECT_DIR$/util" />

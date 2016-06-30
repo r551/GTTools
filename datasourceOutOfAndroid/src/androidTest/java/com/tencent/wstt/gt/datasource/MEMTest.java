@@ -24,71 +24,45 @@
 package com.tencent.wstt.gt.datasource;
 
 import com.tencent.wstt.gt.datasource.engine.DataRefreshListener;
-import com.tencent.wstt.gt.datasource.engine.SMTimerTask;
-import com.tencent.wstt.gt.datasource.util.SMUtils;
-
-import junit.framework.Assert;
+import com.tencent.wstt.gt.datasource.engine.MEMTimerTask;
+import com.tencent.wstt.gt.datasource.engine.ProcessMemTimerTask;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 
-public class SMTest {
+public class MEMTest {
 	@Test
-	public void testSMBase() throws InterruptedException
+	public void testMem() throws InterruptedException
 	{
 		Timer timer = new Timer();
+		
+		MEMTimerTask task = new MEMTimerTask(
+			new DataRefreshListener<Long[]>(){
+	
+				@Override
+				public void onRefresh(long time, Long[] data) {
+					System.out.println(data[0] + "/" + data[1] + "/" + data[2]+ "/" + data[3]);
+				}});
 
-		SMTimerTask taskSM = new SMTimerTask(new DataRefreshListener<Long>() {
-
-			@Override
-			public void onRefresh(long time, Long data) {
-				System.out.println("SM:" + data);
-			}
-		});
-		timer.schedule(taskSM, 1000, 1000); // 初始执行的时候也要延迟1000，因为立即采集的数据是0
+		timer.schedule(task, 0, 1000);
 		Thread.sleep(10000);
 	}
 
 	@Test
-	public void testSMStop() throws InterruptedException
+	public void testProcessMem() throws InterruptedException
 	{
 		Timer timer = new Timer();
+		
+		ProcessMemTimerTask task = new ProcessMemTimerTask("com.android.systemui",
+			new DataRefreshListener<Long[]>(){
+	
+				@Override
+				public void onRefresh(long time, Long[] data) {
+					System.out.println(data[0] + "/" + data[1] + "/" + data[2]);
+				}});
 
-		SMTimerTask taskSM = new SMTimerTask(new DataRefreshListener<Long>() {
-
-			@Override
-			public void onRefresh(long time, Long data) {
-				System.out.println("SM:" + data);
-			}
-		});
-		timer.schedule(taskSM, 0, 1000);
-		Thread.sleep(5000);
-		taskSM.stop();
-		Thread.sleep(5000);
-	}
-
-	@Test
-	public void testGetSMDetail() throws InterruptedException
-	{
-		// 准备一组假数据
-		List<Long> lst = new ArrayList<Long>();
-		for (int i = 0; i < 100; i++)
-		{
-			lst.add(Long.valueOf(60));
-		}
-
-		lst.add(Long.valueOf(10));
-
-		for (int i = 0; i < 100; i++)
-		{
-			lst.add(Long.valueOf(60));
-		}
-
-		int[] result = SMUtils.getSmDetail(lst);
-		Assert.assertTrue(result[5] < 95);
-		Assert.assertEquals(result[1], 5);
+		timer.schedule(task, 0, 1000);
+		Thread.sleep(10000);
 	}
 }
