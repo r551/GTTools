@@ -64,7 +64,7 @@ public class SMTest {
 				System.out.println("SM:" + data);
 			}
 		});
-		timer.schedule(taskSM, 0, 1000);
+		timer.schedule(taskSM, 1000, 1000);
 		Thread.sleep(5000);
 		taskSM.stop();
 		Thread.sleep(5000);

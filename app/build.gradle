@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.tencent.wstt.gt.gttools"
-        minSdkVersion 18
+        minSdkVersion 18 // 受uiautomator要求的版本限制
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -23,8 +23,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.1' // new is 23.3.0
-
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    androidTestCompile 'com.android.support:support-annotations:23.4.0' // 与appcompat同步
     androidTestCompile 'com.android.support.test:runner:0.5'
     // Set this dependency to use JUnit 4 rules
     androidTestCompile 'com.android.support.test:rules:0.5'

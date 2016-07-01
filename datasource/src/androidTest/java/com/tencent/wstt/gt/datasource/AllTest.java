@@ -67,7 +67,7 @@ public class AllTest {
                 System.out.println("SM:" + data);
             }
         });
-        timerSM.schedule(taskSM, 0, 1000);
+        timerSM.schedule(taskSM, 1000, 1000);
 
         // Other
         CPUTimerTask task2 = new CPUTimerTask(android.os.Process.myPid(), 1000,
