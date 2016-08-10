@@ -23,8 +23,6 @@
  */
 package com.tencent.wstt.gt.monitor.model;
 
-import android.support.annotation.NonNull;
-
 import com.tencent.wstt.gt.monitor.threshold.IThresholdListener;
 import com.tencent.wstt.gt.monitor.threshold.ThresholdEntry;
 
@@ -226,7 +224,7 @@ abstract public class AbsOutParam<T extends Comparable> implements Key {
 	 * @param listener 发生告警的监听
 	 */
 	public synchronized void addThresholdListener(
-			@NonNull IThresholdListener<AbsOutParam<T>, T> listener)
+			IThresholdListener<AbsOutParam<T>, T> listener)
 	{
 		if (null == thresholdEntry)
 		{
@@ -241,7 +239,7 @@ abstract public class AbsOutParam<T extends Comparable> implements Key {
 	 * @param listener 欲移除的告警阈值监听
 	 */
 	public synchronized void removeThresholdListener(
-			@NonNull IThresholdListener<AbsOutParam<T>, T> listener)
+			IThresholdListener<AbsOutParam<T>, T> listener)
 	{
 		if (null == thresholdEntry) return;
 		thresholdEntry.removeListener(listener);

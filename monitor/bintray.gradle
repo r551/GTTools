@@ -1,0 +1,90 @@
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+// This is the library version used when deploying the artifact
+group = PROJ_GROUP
+version = PROJ_VERSION
+
+publishing {
+    publications {
+        BugtagsPub(MavenPublication) {
+            from components.java
+            groupId = PROJ_GROUP
+            artifactId = PROJ_ARTIFACTID
+            version = PROJ_VERSION
+
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom.withXml {
+                asNode().appendNode('name', PROJ_POM_NAME)
+                asNode().appendNode('description', PROJ_DESCRIPTION)
+                asNode().appendNode('url', PROJ_WEBSITEURL)
+
+                def licenseNode = asNode().appendNode('licenses').appendNode('license')
+                licenseNode.appendNode('name', PROJ_LICENCE_NAME)
+                licenseNode.appendNode('url', PROJ_LICENCE_URL)
+                licenseNode.appendNode('distribution', PROJ_LICENCE_DEST)
+
+                def developerNode = asNode().appendNode('developers').appendNode('developer')
+                developerNode.appendNode('id', DEVELOPER_ID)
+                developerNode.appendNode('name', DEVELOPER_NAME)
+                developerNode.appendNode('email', DEVELOPER_EMAIL)
+
+
+                def scmNode = asNode().appendNode('scm')
+                scmNode.appendNode('connection', PROJ_VCSURL)
+                scmNode.appendNode('developerConnection', PROJ_VCSURL)
+                scmNode.appendNode('url', PROJ_WEBSITEURL)
+            }
+        }
+    }
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.java.srcDirs
+    exclude '**'
+}
+
+task BugtagsJavadoc(type: Javadoc) {
+    source = sourceSets.main.java.srcDirs
+    exclude '**'
+    failOnError false
+    options.encoding = "utf-8"
+}
+
+task javadocJar(type: Jar, dependsOn: BugtagsJavadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+bintray {
+    user = properties.getProperty('bintray.user')
+    key = properties.getProperty('bintray.apikey')
+    publications = ['BugtagsPub']
+    pkg {
+        repo = 'maven'
+        name = PROJ_NAME
+        userOrg = user
+        licenses = ["MIT"]
+        vcsUrl = PROJ_VCSURL
+        version {
+            name = PROJ_VERSION
+            desc = PROJ_DESCRIPTION
+
+            gpg {
+                sign = true
+                passphrase = properties.getProperty("bintray.gpg.password")
+            }
+        }
+    }
+}

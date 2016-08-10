@@ -23,8 +23,6 @@
  */
 package com.tencent.wstt.gt.monitor.simple;
 
-import android.support.annotation.Nullable;
-
 import com.tencent.wstt.gt.monitor.threshold.IGTComparator;
 import com.tencent.wstt.gt.monitor.threshold.SimpleThresholdListener;
 
@@ -35,9 +33,9 @@ import com.tencent.wstt.gt.monitor.threshold.SimpleThresholdListener;
 public abstract class LongThresholdListener<M> extends SimpleThresholdListener<M, Long> {
 
 	public LongThresholdListener(
-			@Nullable Long higherThan, int higherD, 
-			@Nullable Long lowerThan, int lowerD,
-			@Nullable Long equals, int equalsD) {
+			Long higherThan, int higherD,
+			Long lowerThan, int lowerD,
+			Long equals, int equalsD) {
 		super(higherThan, higherD, lowerThan, lowerD, equals, equalsD);
 	}
 
