@@ -23,9 +23,6 @@
  */
 package com.tencent.wstt.gt.datasource.util;
 
-import com.tencent.wstt.gt.util.DoubleUtils;
-import com.tencent.wstt.gt.util.FileUtil;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;

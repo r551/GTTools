@@ -25,8 +25,6 @@ package com.tencent.wstt.gt.datasource.util;
 
 import android.net.TrafficStats;
 
-import com.tencent.wstt.gt.util.FileUtil;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
