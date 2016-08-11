@@ -47,12 +47,12 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 task sourcesJar(type: Jar) {
     classifier = 'sources'
     from sourceSets.main.java.srcDirs
-    exclude '**'
+//    exclude '**' // 所有的都例外，也就是不打包源码
 }
 
 task BugtagsJavadoc(type: Javadoc) {
     source = sourceSets.main.java.srcDirs
-    exclude '**'
+//    exclude '**' // 所有的都例外，也就是不生成有效的JavaDoc
     failOnError false
     options.encoding = "utf-8"
 }
