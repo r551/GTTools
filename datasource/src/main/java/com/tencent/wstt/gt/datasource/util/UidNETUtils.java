@@ -172,7 +172,7 @@ public class UidNETUtils {
 	/**
 	 * 测试本方案是否可用
 	 * @param uid 测试uid号，如果输入0或负数，则默认用uid=1000(system server)来测试
-	 * @return
+	 * @return true可用，false不可用
 	 */
 	public static boolean test(int uid)
 	{

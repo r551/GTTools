@@ -36,7 +36,7 @@ public class DoubleUtils {
 	 * 
 	 * @param d1
 	 * @param d2
-	 * @return
+	 * @return 乘积结果
 	 */
 	public static double mul(double d1, double d2) {
 		BigDecimal bd1 = new BigDecimal(Double.toString(d1));
@@ -61,7 +61,7 @@ public class DoubleUtils {
 	 * @param d2
 	 * @param scale
 	 *            四舍五入 小数点位数
-	 * @return
+	 * @return 除法结果
 	 */
 	public static double div(double d1, double d2, int scale) {
 		// 当然在此之前，你要判断分母是否为0，

@@ -52,7 +52,7 @@ public class FileUtil {
 	/**
 	 * 关闭Writer
 	 * 
-	 * @param br
+	 * @param wr
 	 */
 	public static void closeWriter(Writer wr) {
 		if (wr != null) {
@@ -67,7 +67,7 @@ public class FileUtil {
 	/**
 	 * flush Writer
 	 * 
-	 * @param br
+	 * @param wr
 	 */
 	public static void flushWriter(Writer wr) {
 		if (wr != null) {
@@ -112,7 +112,7 @@ public class FileUtil {
 	/**
 	 * 文件管道的关闭
 	 * 
-	 * @param in
+	 * @param chl
 	 */
 	public static void closeFileChannel(FileChannel chl) {
 		if (chl != null) {
