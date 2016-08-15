@@ -9,9 +9,21 @@ v1.0
 ##### datasource
 数据采集模块。因为流畅度的采集，依赖于log模块。可选monitor模块做为数据监控方，也可以自定义已采集数据的监控，如简单的日志输出。
 ##### util
-Android相关的轻量工具包，依赖Android SDK，无独立使用价值。
+Android相关的轻量工具包，依赖Android SDK，无独立使用价值，未发布在jcenter。
 ##### log
-LogCat日志解析模块，从CatLog精简而来。依赖util模块，一般不会独立使用。
+LogCat日志解析模块，从CatLog精简而来。依赖util模块，一般不会独立使用，未发布在jcenter。
+##### facade
+非公开模块，用于放置腾讯内部常用产品使用GTTools的独立封装，未发布在jcenter。
+##### datasourceOutOfAndroid
+未完成模块，和数据采集模块功能一致，实现上将不依赖Android环境，适用场景为从PC上测试手机App，未发布在jcenter。
+### 使用方法：
+在Android Studio中，可以通过jcenter库对已发布的monitor和datasource模块进行引用：
+```groovy
+dependencies {
+  androidTestCompile 'com.tencent.wstt.gt:datasource:1.0.1'
+  androidTestCompile 'com.tencent.wstt.gt:monitor:1.0.1'
+}
+```
 ### DEMO
 ##### monitor模块的使用
 完整测试代码在monitor/src/test目录中
