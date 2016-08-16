@@ -16,7 +16,7 @@ LogCat日志解析模块，从CatLog精简而来。依赖util模块，一般不�
 非公开模块，用于放置腾讯内部常用产品使用GTTools的独立封装，未发布在jcenter。
 ##### datasourceOutOfAndroid
 未完成模块，和数据采集模块功能一致，实现上将不依赖Android环境，适用场景为从PC上测试手机App，未发布在jcenter。
-### 使用方法：
+#### 使用方法
 在Android Studio中，可以通过jcenter库对已发布的monitor和datasource模块进行引用：
 ```groovy
 dependencies {
