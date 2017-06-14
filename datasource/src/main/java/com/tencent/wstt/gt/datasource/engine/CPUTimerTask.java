@@ -32,7 +32,7 @@ import java.util.TimerTask;
  * CPU数据采集引擎，以定时任务的方式实现，因为CPU采集算法中会停滞指定的时间，所以该任务在定时器的时间间隔要设置为1ms。
  * 支持整机CPU的采集和指定进程CPU的采集。
  */
-public class CPUTimerTask extends TimerTask {
+public class CPUTimerTask extends TimerTask  implements TargetChangeable<Integer>{
 	private int pid;
 	private int interval;
 	private DataRefreshListener<Double> cpuFreshListener;
@@ -71,5 +71,15 @@ public class CPUTimerTask extends TimerTask {
 	public void stop()
 	{
 		this.cancel();
+	}
+
+	@Override
+	public Integer getTarget() {
+		return pid;
+	}
+
+	@Override
+	public void setTarget(Integer pid) {
+		this.pid = pid;
 	}
 }

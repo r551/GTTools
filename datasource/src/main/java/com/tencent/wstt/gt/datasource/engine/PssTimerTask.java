@@ -32,7 +32,7 @@ import java.util.TimerTask;
 /**
  * 进程的PSS维度内存采集引擎
  */
-public class PssTimerTask extends TimerTask {
+public class PssTimerTask extends TimerTask implements TargetChangeable<Integer>{
 	private Context c;
 	private int pid;
 	private DataRefreshListener<Long[]> dataRefreshListener;
@@ -63,5 +63,15 @@ public class PssTimerTask extends TimerTask {
 	public void stop()
 	{
 		this.cancel();
+	}
+
+	@Override
+	public Integer getTarget() {
+		return pid;
+	}
+
+	@Override
+	public void setTarget(Integer pid) {
+		this.pid = pid;
 	}
 }
