@@ -32,4 +32,10 @@ public abstract class DataRefreshListener<T> implements IDataRefreshListener<T>{
 	 */
 	@Override
 	public void onRefresh(long time, T data, TargetChangeable target){}
+
+	/**
+	 * 也提供onRefresh方法2个参数的空实现，这样需要使用3个参数的新用户，就不需要额外写2个参数的实现了
+     */
+	@Override
+	public void onRefresh(long time, T data){}
 }
