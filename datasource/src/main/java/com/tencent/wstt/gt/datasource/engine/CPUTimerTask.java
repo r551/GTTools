@@ -58,8 +58,8 @@ public class CPUTimerTask extends TimerTask  implements TargetChangeable<Integer
 		if (pid > 0) // 进程的
 		{
 			double result[] = ProcessCPUUtils.getUsage(pid, interval);
-			cpuFreshListener.onRefresh(System.currentTimeMillis(), Double.valueOf(result[0]));
-			jiffiesFreshListener.onRefresh(System.currentTimeMillis(), Long.valueOf((long)result[1]));
+			cpuFreshListener.onRefresh(System.currentTimeMillis(), Double.valueOf(result[0]), this);
+			jiffiesFreshListener.onRefresh(System.currentTimeMillis(), Long.valueOf((long)result[1]), this);
 		}
 		else // 整机的
 		{

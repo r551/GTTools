@@ -23,13 +23,7 @@
  */
 package com.tencent.wstt.gt.datasource.engine;
 
-public abstract class DataRefreshListener<T> implements IDataRefreshListener<T>{
-
-	/**
-	 * 为了支持接口TargetChangeable且老的用户不需要修改代码，
-	 * 将DataRefreshListener从interface降级为抽象类，提供onRefresh3个参数默认实现，
-	 * 保持原有对DataRefreshListener使用不变
-	 */
-	@Override
-	public void onRefresh(long time, T data, TargetChangeable target){}
+public interface IDataRefreshListener<T> {
+	void onRefresh(long time, T data);
+	void onRefresh(long time, T data, TargetChangeable target);
 }

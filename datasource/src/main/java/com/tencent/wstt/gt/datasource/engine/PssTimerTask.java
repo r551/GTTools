@@ -57,7 +57,7 @@ public class PssTimerTask extends TimerTask implements TargetChangeable<Integer>
 		{
 			temp[i] = Long.valueOf(result[i]);
 		}
-		dataRefreshListener.onRefresh(System.currentTimeMillis(), temp);
+		dataRefreshListener.onRefresh(System.currentTimeMillis(), temp, this);
 	}
 
 	public void stop()
